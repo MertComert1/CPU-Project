@@ -1,2 +1,2 @@
-Very Simple Cpu project. 
+Very Simple CPU project. 
 http://cpu.tc/
