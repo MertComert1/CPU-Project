@@ -1,2 +1,2 @@
-Very Simple CPU project. 
+Very Simple CPU project with VHDL language. 
 http://cpu.tc/
