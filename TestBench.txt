@@ -1,0 +1,67 @@
+`timescale 1ns/1ps
+
+module testbench;
+  reg clk;
+  reg rst;
+  reg interrupt;
+  wire wrEn;
+  reg [31:0] data_fromRAM;
+  wire [31:0] data_toRAM;
+  wire [13:0] addr_toRAM;
+  reg [31:0] memory [0:31];  // Adding memory register
+  
+  // Instantiate the Device Under Test (DUT)
+  VerySimpleCPU uut (
+    .clk(clk), 
+    .rst(rst), 
+    .data_fromRAM(data_fromRAM), 
+    .wrEn(wrEn), 
+    .addr_toRAM(addr_toRAM), 
+    .data_toRAM(data_toRAM), 
+    .interrupt(interrupt)
+  );
+
+  // Clock process definitions
+  initial forever begin
+    clk = 0;
+    forever #10 clk = ~clk; // 100 MHz clock
+  end
+  
+  // Stimulus process
+  initial begin
+    // Reset
+    rst = 1;
+    #20;
+    rst = 0;
+    #20;
+    // Initialization
+    $dumpfile("dump.vcd"); $dumpvars;
+    memory[0] = 32'h90190032;
+    memory[1] = 32'h90194006;
+    memory[2] = 32'h90198000;
+    memory[3] = 32'h9019c000;
+    memory[4] = 32'h2019c067;
+    memory[5] = 32'h60194064;
+    memory[6] = 32'hc0040065;
+    memory[7] = 32'h20194067;
+    memory[8] = 32'h190065;
+    memory[9] = 32'h20194067;
+    memory[10] = 32'h10198001;
+    memory[11] = 32'hc0014000;
+    memory[16] = 32'h801a4066;
+    memory[17] = 32'hd0044000;   
+  end
+  
+  initial begin
+    // Interrupt
+    interrupt = 0;
+    #200;
+    interrupt = 1;
+    #20;
+    interrupt = 0;
+  end
+  
+  initial begin
+    #2000 $finish;
+  end
+endmodule
